@@ -53,51 +53,61 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isDead) return; // 이미 죽은 적은 데미지 처리하지 않음
+        if (isDead) return;
 
         AttackData attack;
-        float beforeHp = Hp;
         if (collision.TryGetComponent(out attack))
         {
-            Hp -= attack.Damage;
-
-            // --- 추가된 부분: 체력이 깎일 때마다 이벤트 발생 ---
-            OnHpChanged?.Invoke(Hp, MaxHp);
-            // ---------------------------------------------------
-
-            if (Hp <= 0)
-            {
-                isDead = true; // 중복 사망 처리 방지
-                col.enabled = false; // 추가 충돌 즉시 차단
-                WaveManager.Instance.OnEnemyKilled();
-
-                // 🔹 보스 여부 체크 후 효과음 재생
-                if (TryGetComponent<BossEnemy>(out BossEnemy boss))
-                {
-                    AudioManager.Instance.PlayBossDeath(); // 보스 전용 효과음
-                }
-                else
-                {
-                    AudioManager.Instance.PlayEnemyDeath2(); // 일반 적
-                }
-
-                var particle = Instantiate(destroyParticle, transform.position, Quaternion.identity);
-                ParticleSystem ps = particle.GetComponent<ParticleSystem>();
-                var main = ps.main;
-                main.startColor = spriteRenderer.color;
-
-                Destroy(gameObject);
-
-                if (collision.gameObject.name == "FilledShape")
-                {
-                    GameTimer.Instance.ReduceTime(2);
-                }
-            }
-            else if (beforeHp > Hp)
-            {
-                ParticleSystem hitEffect = Instantiate(destroyParticle, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-                hitEffect.Play();
-            }
+            bool reduceTime = (collision.gameObject.name == "FilledShape");
+            TakeDamage(attack.Damage, reduceTime);
         }
     }
-}
+
+    /// <summary>
+    /// 외부에서 직접 데미지를 줄 때 사용합니다. (TraceReplayer 등)
+    /// </summary>
+    public void TakeDamage(int damage, bool reduceTime = true)
+    {
+        if (isDead) return;
+
+        float beforeHp = Hp;
+        Hp -= damage;
+
+        // 체력 변경 이벤트
+        OnHpChanged?.Invoke(Hp, MaxHp);
+
+        if (Hp <= 0)
+        {
+            isDead = true;
+            col.enabled = false;
+            WaveManager.Instance.OnEnemyKilled();
+
+            // 보스 여부 체크 후 효과음 재생
+            if (TryGetComponent<BossEnemy>(out BossEnemy boss))
+            {
+                AudioManager.Instance.PlayBossDeath();
+            }
+            else
+            {
+                AudioManager.Instance.PlayEnemyDeath2();
+            }
+
+            var particle = Instantiate(destroyParticle, transform.position, Quaternion.identity);
+            ParticleSystem ps = particle.GetComponent<ParticleSystem>();
+            var main = ps.main;
+            main.startColor = spriteRenderer.color;
+
+            Destroy(gameObject);
+
+            if (reduceTime)
+            {
+                GameTimer.Instance.ReduceTime(2);
+            }
+        }
+        else if (beforeHp > Hp)
+        {
+            ParticleSystem hitEffect = Instantiate(destroyParticle, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+            hitEffect.Play();
+        }
+    }
+}

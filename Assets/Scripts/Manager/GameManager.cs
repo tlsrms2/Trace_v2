@@ -67,8 +67,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.visible = false;
+        // Cursor.lockState = CursorLockMode.Locked;
         OnTraceEnded += StartChargeWait;
     }
 
@@ -83,9 +83,11 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
             TogglePause();
 
-        if (Input.GetKeyDown(KeyCode.Space) && CurrentPhase == GamePhase.RealTime && !IsPaused)
+        // TRACE 진입: RealTime에서만 가능, 최소 게이지 10% 이상 필요
+        if (Input.GetKeyDown(KeyCode.Space) && CurrentPhase == GamePhase.RealTime && !IsPaused && GetGaugePercentage() > 0.1f)
             ChangePhase(GamePhase.Paused);
 
+        // TRACE 종료 → REPLAY: Space를 떼면 기록 종료 후 리플레이 시작
         if (Input.GetKeyUp(KeyCode.Space) && CurrentPhase == GamePhase.Paused)
             ChangePhase(GamePhase.Replay);
 
