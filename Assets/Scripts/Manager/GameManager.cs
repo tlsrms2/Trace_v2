@@ -120,13 +120,14 @@ public class GameManager : MonoBehaviour
     {
         if (CurrentPhase == nextPhase) return;
 
-        switch (CurrentPhase)
+        GamePhase prevPhase = CurrentPhase;
+        CurrentPhase = nextPhase;
+
+        switch (prevPhase)
         {
             case GamePhase.Paused: OnTraceEnded?.Invoke(); break;
             case GamePhase.RealTime: OnTraceStarted?.Invoke(); break;
         }
-
-        CurrentPhase = nextPhase;
 
         switch (nextPhase)
         {

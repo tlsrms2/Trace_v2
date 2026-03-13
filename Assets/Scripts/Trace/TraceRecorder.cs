@@ -14,13 +14,16 @@ public class TraceRecorder : MonoBehaviour
     public bool IsRecording { get; private set; }
 
     public List<TraceFrame> recordedFrames = new List<TraceFrame>();
-    private float recordInterval;
+    public float RecordInterval { get; private set; }
     private float recordTimer;
     private bool attackQueued; // 이번 기록 프레임에 공격을 태그할지 여부
 
+    private GhostVisual gv;
+
     private void Awake()
     {
-        recordInterval = 1f / fpsTrace;
+        gv = GetComponent<GhostVisual>();
+        RecordInterval = 1f / fpsTrace;
     }
 
     private void Start()
@@ -49,9 +52,9 @@ public class TraceRecorder : MonoBehaviour
 
         recordTimer += Time.unscaledDeltaTime;
 
-        if (recordTimer >= recordInterval)
+        if (recordTimer >= RecordInterval)
         {
-            recordTimer -= recordInterval;
+            recordTimer -= RecordInterval;
             RecordFrame();
         }
     }
@@ -83,6 +86,8 @@ public class TraceRecorder : MonoBehaviour
         );
 
         recordedFrames.Add(frame);
+        
+        gv.SpawnTrailGhost();
     }
 
     public List<TraceFrame> GetRecordedFramesCopy()

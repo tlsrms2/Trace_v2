@@ -133,9 +133,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3193138784171039048, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
-      propertyPath: replaySpeedMultiplier
-      value: 2
+      propertyPath: ghostOverlapThreshold
+      value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 4646295380864483791, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
+      propertyPath: trailSpawnInterval
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646295380864483791, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
+      propertyPath: attackMarkerSpriteRenderer
+      value: 
+      objectReference: {fileID: 1281890007}
     - target: {fileID: 5136286948729109972, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
       propertyPath: fpsTrace
       value: 6
@@ -997,7 +1005,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -959.99994, y: 0}
+  m_AnchoredPosition: {x: -960, y: 0}
   m_SizeDelta: {x: -99.99988, y: 980}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &663482457
@@ -2282,6 +2290,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
+--- !u!212 &1281890007 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5879673273813815623, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
+  m_PrefabInstance: {fileID: 72363533}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1289906134
 PrefabInstance:
   m_ObjectHideFlags: 0

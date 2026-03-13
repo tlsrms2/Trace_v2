@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -9,8 +10,8 @@ using UnityEngine;
 public class TraceReplayer : MonoBehaviour
 {
     [Header("Replay Settings")]
-    [Tooltip("전체 기록을 재생하는 데 걸리는 시간 (초)")]
-    [SerializeField] private float replayDuration = 1.0f;
+    [Tooltip("실제 기록된 시간보다 얼마나 빠르게 재생할지 배속 설정")]
+    [SerializeField] private float replaySpeedMultiplier = 3.0f;
 
     [Header("Attack Settings")]
     [Tooltip("ATTACK 프레임에서 보스에게 데미지를 줄 반경")]
@@ -23,15 +24,18 @@ public class TraceReplayer : MonoBehaviour
     [Header("Attack VFX")]
     [SerializeField] private GameObject attackEffectPrefab;
 
+
     public bool IsReplaying { get; private set; }
 
     public event Action OnReplayFinished;
 
     private TraceRecorder recorder;
+    private GhostVisual gv;
 
     private void Awake()
     {
         recorder = GetComponent<TraceRecorder>();
+        gv = GetComponent<GhostVisual>();
     }
 
     private void Start()
@@ -58,16 +62,22 @@ public class TraceReplayer : MonoBehaviour
         StartCoroutine(ReplayCoroutine(recorder.GetRecordedFramesCopy()));
     }
 
+    [Header("Ghost Trail Settings")]
+    [Tooltip("플레이어와 잔상이 이 거리 이내면 잔상을 소멸시킴")]
+    [SerializeField] private float ghostOverlapThreshold = 0.3f;
+
     private IEnumerator ReplayCoroutine(List<TraceFrame> frames)
     {
         IsReplaying = true;
         int frameCount = frames.Count;
 
-        float frameInterval = replayDuration / (frameCount - 1);
-        float elapsed = 0f;
+        // 원본 기록 간격을 배속으로 나누어 실제 재생 프레임 간격 계산
+        float frameInterval = recorder.RecordInterval / replaySpeedMultiplier;
 
-        // 첫 프레임 이전의 ATTACK은 무시할 HashSet (중복 방지)
         HashSet<int> attackedFrameIndices = new HashSet<int>();
+
+        // 잔상 리스트 가져오기
+        List<GameObject> ghostList = gv.GetGhostListCopy();
 
         for (int i = 0; i < frameCount - 1; i++)
         {
@@ -79,13 +89,14 @@ public class TraceReplayer : MonoBehaviour
             while (segmentElapsed < frameInterval)
             {
                 segmentElapsed += Time.deltaTime;
-                elapsed += Time.deltaTime;
 
                 float t = Mathf.Clamp01(segmentElapsed / frameInterval);
 
-                // 위치 보간
                 transform.position = Vector3.Lerp(from.position, to.position, t);
                 transform.rotation = Quaternion.Slerp(from.rotation, to.rotation, t);
+
+                // 매 프레임마다 플레이어와 겹치는 잔상 제거
+                RemoveOverlappingGhosts(ghostList);
 
                 yield return null;
             }
@@ -100,9 +111,32 @@ public class TraceReplayer : MonoBehaviour
             }
         }
 
+        // 혹시 남은 잔상 전부 제거
+        foreach (var ghost in ghostList)
+        {
+            if (ghost != null)
+                Destroy(ghost);
+        }
+
         IsReplaying = false;
         OnReplayFinished?.Invoke();
         GameManager.Instance.ChangePhase(GamePhase.RealTime);
+    }
+
+    private void RemoveOverlappingGhosts(List<GameObject> ghostList)
+    {
+        Vector3 playerPos = transform.position;
+
+        for (int i = 0; i < ghostList.Count; i++)
+        {
+            if (ghostList[i] == null) continue;
+
+            float dist = Vector3.Distance(playerPos, ghostList[i].transform.position);
+            if (dist <= ghostOverlapThreshold)
+            {
+                Destroy(ghostList[i]);
+            }
+        }
     }
 
     private void PerformAttack(Vector3 position)
@@ -124,9 +158,6 @@ public class TraceReplayer : MonoBehaviour
         {
             Instantiate(attackEffectPrefab, position, Quaternion.identity);
         }
-
-        // Screen Shake
-        // ScreenShake.Instance?.Shake();
     }
 
     private void OnDrawGizmosSelected()
