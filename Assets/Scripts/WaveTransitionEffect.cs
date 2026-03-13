@@ -25,25 +25,13 @@ public class WaveTransitionEffect : MonoBehaviour
     {
         if (flashImage != null)
         {
-            // 시작할 때 플래시 이미지는 투명하게, 클릭 무시하게 설정
             flashImage.color = new Color(1, 1, 1, 0);
             flashImage.raycastTarget = false; 
         }
-
-        // WaveManager의 트랜지션 시작 이벤트 구독
-        if (WaveManager.Instance != null)
-        {
-            WaveManager.Instance.OnWaveTransitionStarted += StartTransition;
-        }
+        // 웨이브 시스템 제거로 트랜지션 이벤트 미사용
     }
 
-    private void OnDestroy()
-    {
-        if (WaveManager.Instance != null)
-        {
-            WaveManager.Instance.OnWaveTransitionStarted -= StartTransition;
-        }
-    }
+    private void OnDestroy() { }
 
     // WaveManager가 콜백 함수를 담아서 이 함수를 호출함
     private void StartTransition(Action onComplete)

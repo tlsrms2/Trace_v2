@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Timeline;
 
 /// <summary>
 /// TRACE 모드에서 고스트를 표시하고, REPLAY 모드에서 잔상 효과를 생성합니다.

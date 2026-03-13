@@ -136,6 +136,26 @@ PrefabInstance:
       propertyPath: replaySpeedMultiplier
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4646295380864483791, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
+      propertyPath: ghostColor.a
+      value: 0.72156864
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646295380864483791, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
+      propertyPath: ghostColor.b
+      value: 0.46591577
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646295380864483791, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
+      propertyPath: ghostColor.g
+      value: 0.45882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646295380864483791, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
+      propertyPath: ghostColor.r
+      value: 0.67058825
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646295380864483791, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
+      propertyPath: attackMarkerSpriteRenderer
+      value: 
+      objectReference: {fileID: 5879673273813815623, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
     - target: {fileID: 5136286948729109972, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
       propertyPath: fpsTrace
       value: 6
@@ -644,8 +664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb6975b651734743b7939d5a79578a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveUIManager
-  waveText: {fileID: 1184939511}
-  enemyCountText: {fileID: 665151523}
+  bossHpText: {fileID: 0}
   activeVisualEffect: {fileID: 663482457}
 --- !u!114 &312554648
 MonoBehaviour:
@@ -1278,8 +1297,8 @@ MonoBehaviour:
   MaxGauge: 100
   CurrentGauge: 100
   ConsumptionRate: 30
-  RecoveryRate: 10
-  RecoveryStartTime: 0.5
+  RecoveryRate: 20
+  RecoveryStartTime: 0
 --- !u!4 &835026620
 Transform:
   m_ObjectHideFlags: 0
@@ -3712,28 +3731,13 @@ GameObject:
   m_Component:
   - component: {fileID: 2084464468}
   - component: {fileID: 2084464467}
-  - component: {fileID: 2084464466}
   m_Layer: 0
   m_Name: WaveManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &2084464466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2084464465}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35b778b571d01a944a24b63af21e1707, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  xOffset: 15
-  yOffset: 10
+  m_IsActive: 1
 --- !u!114 &2084464467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3746,11 +3750,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df133c93f12205f46a6d21d9bae15fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveManager
-  waves:
-  - {fileID: 11400000, guid: 0b762ec9dda3d0649906296c163aa325, type: 2}
-  - {fileID: 11400000, guid: 2ff37487367f5d649bb63b964ba66107, type: 2}
-  - {fileID: 11400000, guid: 3f3adab38a148784c9fda74a7b40a262, type: 2}
-  - {fileID: 11400000, guid: 20cb178bc731a7146be6fce2953abf01, type: 2}
+  bossPrefab: {fileID: 6892968917303159334, guid: 03fd80b75aef24c449282b960b0651dd, type: 3}
+  bossSpawnPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &2084464468
 Transform:
   m_ObjectHideFlags: 0
@@ -3838,7 +3839,7 @@ SceneRoots:
   - {fileID: 1134904699}
   - {fileID: 770580034}
   - {fileID: 1289906134}
+  - {fileID: 72363533}
   - {fileID: 312554646}
   - {fileID: 1606726919}
   - {fileID: 176894029}
-  - {fileID: 72363533}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7529394493185834358}
   - component: {fileID: 1626396548220528894}
   m_Layer: 0
-  m_Name: Boss Destroy Particle
+  m_Name: Boss Damaged Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

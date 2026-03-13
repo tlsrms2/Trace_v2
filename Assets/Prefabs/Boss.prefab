@@ -394,13 +394,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f41cbc57aba5bba40812b54f71138a64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
-  speed: 50
-  increaseSpeed: 0
-  Hp: 25
-  destroyParticle: {fileID: 7710619616481920721, guid: 3c0bd7c7aeb700f47b7af6d70d4c39e7, type: 3}
-  dashSpeed: 20
+  maxHp: 100
+  speed: 20
+  damagedParticle: {fileID: 7710619616481920721, guid: 3c0bd7c7aeb700f47b7af6d70d4c39e7, type: 3}
   introDownDistance: 9
   introDuration: 2
+  phase2Threshold: 0.5
+  phase3Threshold: 0.25
   bulletDamage: 5
   muzzles:
   - {fileID: 2298197110583238353}
@@ -411,9 +411,10 @@ MonoBehaviour:
   - {fileID: 6624199107135393783}
   - {fileID: 6549179480017792155}
   - {fileID: 3927576155995885796}
-  bulletSpeed: 6
+  bulletSpeed: 7
   bulletPrefab: {fileID: 3257211389862254461, guid: 2b1b7e2ff78187d4faf30f633e5b1840, type: 3}
-  alertTime: 2
+  targetScaleMultiplier: 3
+  dashSpeed: 40
   pathColor: {r: 1, g: 0, b: 0, a: 0.5}
 --- !u!1 &7571092974899525130
 GameObject:

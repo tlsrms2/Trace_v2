@@ -141,16 +141,14 @@ public class TraceReplayer : MonoBehaviour
 
     private void PerformAttack(Vector3 position)
     {
-        // 범위 내 적 탐색
         Collider2D[] hits = Physics2D.OverlapCircleAll(position, attackRange, enemyLayer);
 
         foreach (var hit in hits)
         {
-            Enemy enemy = hit.GetComponent<Enemy>();
-            if (enemy != null)
+            BaseBoss boss = hit.GetComponent<BaseBoss>();
+            if (boss != null)
             {
-                // Enemy.TakeDamage를 직접 호출
-                enemy.TakeDamage(attackDamage, true);
+                boss.TakeDamage(attackDamage, true);
             }
         }
 
