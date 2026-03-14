@@ -86,9 +86,14 @@ public class BossBullet : MonoBehaviour
             return;
         }
 
+        if (collision.gameObject.CompareTag("Player") && collision.TryGetComponent<PlayerHealth>(out var playerHp))
+        {
+            playerHp.TakeDamage(damage);
+            Destroy(gameObject);
+        }
+
         Vector2 knockbackDirection = Vector2.zero;
-        AttackData attack;
-        if (collision.TryGetComponent(out attack) && collision.gameObject.CompareTag("Player"))
+        if (collision.TryGetComponent(out PlayerAttack _) && collision.gameObject.CompareTag("Player"))
         {
             if (shooterTransform != null)
             {
@@ -104,12 +109,7 @@ public class BossBullet : MonoBehaviour
 
             float angle = Mathf.Atan2(knockbackDirection.y, knockbackDirection.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, angle);
-
-            AttackData attackData = gameObject.GetComponent<AttackData>();
-            attackData.Damage = 5;
-
-            return;
-        }   
+        }
     }
 
     private IEnumerator DestroyAfterTime()

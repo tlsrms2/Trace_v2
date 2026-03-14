@@ -18,11 +18,13 @@ public struct TraceFrame
     public Vector3 position;
     public Quaternion rotation;
     public TraceAction action;
+    public Vector3 attackDirection;
 
-    public TraceFrame(Vector3 position, Quaternion rotation, TraceAction action)
+    public TraceFrame(Vector3 position, Quaternion rotation, TraceAction action, Vector3 attackDir = default)
     {
         this.position = position;
         this.rotation = rotation;
         this.action = action;
+        this.attackDirection = attackDir;
     }
 }

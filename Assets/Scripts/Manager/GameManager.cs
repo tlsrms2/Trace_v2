@@ -42,10 +42,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject secondClearButton;
     [SerializeField] private GameObject thirdSelectButton;
 
-    [Header("Leaderboard UI")]
-    [SerializeField] private TextMeshProUGUI rankText;
-    [SerializeField] private TextMeshProUGUI nameText;
-    [SerializeField] private TextMeshProUGUI timeText;
 
     [Header("Gauge Settings")]
     [SerializeField] private float MaxGauge = 100f;
@@ -75,7 +71,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         TitleUIFocus();
-        UpdateLeaderboardUI();
     }
 
     private void Update()
@@ -205,15 +200,11 @@ public class GameManager : MonoBehaviour
         if (string.IsNullOrEmpty(playerName))
             playerName = "Unnamed";
 
-        LeaderboardManager.Instance.AddScore(playerName, GameTimer.Instance.currentTime);
-
         firstClearPanel.SetActive(false);
         secondClearPanel.SetActive(true);
 
         clearText.SetActive(false);
         timerText.SetActive(false);
-
-        UpdateSecondPanelLeaderboard();
 
         EventSystem.current.SetSelectedGameObject(null);
 
@@ -227,25 +218,6 @@ public class GameManager : MonoBehaviour
         secondPanelReady = true;
     }
 
-    private void UpdateSecondPanelLeaderboard()
-    {
-        if (LeaderboardManager.Instance == null) return;
-
-        var leaderboard = LeaderboardManager.Instance.GetLeaderboard();
-        int count = Mathf.Min(leaderboard.Count, 10); // 최대 10개까지만 표시
-
-        rankText.text = "";
-        nameText.text = "";
-        timeText.text = "";
-
-        for (int i = 0; i < count; i++)
-        {
-            var entry = leaderboard[i];
-            rankText.text += entry.rank + "\n";
-            nameText.text += entry.playerName + "\n";
-            timeText.text += entry.clearTime.ToString("F2") + "\n";
-        }
-    }
 
     private void SetUIFocus(GameObject firstSelected)
     {
@@ -295,24 +267,6 @@ public class GameManager : MonoBehaviour
     private void StartCharge() => canCharge = true;
     #endregion
 
-    #region Scene & UI Interaction
-    public void UpdateLeaderboardUI()
-    {
-        if (LeaderboardManager.Instance == null || rankText == null) return;
-
-        var leaderboard = LeaderboardManager.Instance.GetLeaderboard();
-
-        rankText.text = "";
-        nameText.text = "";
-        timeText.text = "";
-
-        foreach (var entry in leaderboard)
-        {
-            rankText.text += entry.rank + "\n";
-            nameText.text += entry.playerName + "\n";
-            timeText.text += entry.clearTime.ToString("F2") + "\n";
-        }
-    }
 
     public void RestartGame()
     {
@@ -337,5 +291,4 @@ public class GameManager : MonoBehaviour
         Application.Quit();
         Debug.Log("게임 종료");
     }
-    #endregion
 }

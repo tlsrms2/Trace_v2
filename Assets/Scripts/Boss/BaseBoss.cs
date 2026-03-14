@@ -94,7 +94,7 @@ public abstract class BaseBoss : MonoBehaviour
     // ───────────────────────────────
     // 데미지 처리 (TakeDamage)
     // ───────────────────────────────
-    public void TakeDamage(int damage, bool reduceTime = true)
+    public void TakeDamage(int damage)
     {
         if (IsDead) return;
 
@@ -111,7 +111,6 @@ public abstract class BaseBoss : MonoBehaviour
             var particle = Instantiate(damagedParticle, transform.position, Quaternion.identity);
             ParticleSystem ps = particle.GetComponent<ParticleSystem>();
             var main = ps.main;
-            main.startColor = spriteRenderer.color;
         }
     }
 
@@ -128,16 +127,11 @@ public abstract class BaseBoss : MonoBehaviour
     }
 
     // ───────────────────────────────
-    // 트리거 충돌 (AttackData)
+    // 자식 클래스에서 충돌 처리를 구현
     // ───────────────────────────────
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (IsDead) return;
-
-        if (collision.TryGetComponent<AttackData>(out var attack))
-        {
-            TakeDamage(attack.Damage);
-        }
+        // 보스는 이제 TraceReplayer의 PerformAttack에서 직접 TakeDamage 호출을 받습니다.
     }
 
     // ───────────────────────────────

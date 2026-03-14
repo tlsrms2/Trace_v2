@@ -25,6 +25,7 @@ public class GhostVisual : MonoBehaviour
     [Tooltip("TRACE 모드 클릭 시 공격 마커 색상")]
     [SerializeField] private Color attackMarkerColor = new Color(1f, 0.3f, 0.3f, 0.7f);
 
+    private PlayerHealth playerHP;
     private SpriteRenderer playerSpriteRenderer;
     private TraceRecorder recorder;
     private Color originalColor;
@@ -38,12 +39,24 @@ public class GhostVisual : MonoBehaviour
 
     private void Awake()
     {
-        playerSpriteRenderer = GetComponent<SpriteRenderer>();
+        playerHP = GetComponent<PlayerHealth>();
         recorder = GetComponent<TraceRecorder>();
+        playerSpriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
-        if (playerSpriteRenderer != null)
+    private void OnEnable()
+    {
+        if (playerHP != null)
         {
-            originalColor = playerSpriteRenderer.color;
+            playerHP.OnHpChanged += UpdateOriginalColor;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (playerHP != null)
+        {
+            playerHP.OnHpChanged -= UpdateOriginalColor;
         }
     }
 
@@ -163,5 +176,16 @@ public class GhostVisual : MonoBehaviour
     public float GetTrailSpawnInterval()
     {
         return trailSpawnInterval;
+    }
+
+    private void UpdateOriginalColor(int currentHp, int maxHp)
+    {
+        switch (currentHp)
+        {
+            case 3: originalColor = Color.white; break;
+            case 2: originalColor = new Color(1f, 0.5f, 0f); break; 
+            case 1: originalColor = Color.red; break;
+            default: break;
+        }
     }
 }

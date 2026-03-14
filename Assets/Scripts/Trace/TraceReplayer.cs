@@ -14,15 +14,8 @@ public class TraceReplayer : MonoBehaviour
     [SerializeField] private float replaySpeedMultiplier = 3.0f;
 
     [Header("Attack Settings")]
-    [Tooltip("ATTACK 프레임에서 보스에게 데미지를 줄 반경")]
-    [SerializeField] private float attackRange = 1.5f;
-    [Tooltip("ATTACK 1회당 데미지")]
-    [SerializeField] private int attackDamage = 10;
-    [Tooltip("공격 판정 대상 레이어")]
-    [SerializeField] private LayerMask enemyLayer;
-
-    [Header("Attack VFX")]
-    [SerializeField] private GameObject attackEffectPrefab;
+    [Tooltip("Player의 자식 오브젝트에 있는 PlayerAttack 컴포넌트")]
+    [SerializeField] private PlayerAttack playerAttack;
 
 
     public bool IsReplaying { get; private set; }
@@ -107,7 +100,7 @@ public class TraceReplayer : MonoBehaviour
             if (to.action == TraceAction.ATTACK && !attackedFrameIndices.Contains(i + 1))
             {
                 attackedFrameIndices.Add(i + 1);
-                PerformAttack(to.position);
+                PerformAttack(to.position, to.attackDirection);
             }
         }
 
@@ -139,29 +132,12 @@ public class TraceReplayer : MonoBehaviour
         }
     }
 
-    private void PerformAttack(Vector3 position)
+    private void PerformAttack(Vector3 position, Vector3 direction)
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(position, attackRange, enemyLayer);
-
-        foreach (var hit in hits)
+        if (playerAttack != null)
         {
-            BaseBoss boss = hit.GetComponent<BaseBoss>();
-            if (boss != null)
-            {
-                boss.TakeDamage(attackDamage, true);
-            }
+            playerAttack.Attack(direction);
         }
-
-        if (attackEffectPrefab != null)
-        {
-            Instantiate(attackEffectPrefab, position, Quaternion.identity);
-        }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
-        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
 
