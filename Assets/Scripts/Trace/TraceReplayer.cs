@@ -46,12 +46,6 @@ public class TraceReplayer : MonoBehaviour
 
     private void OnTraceEnded()
     {
-        if (recorder == null || recorder.RecordedFrames.Count < 2) 
-        {
-            GameManager.Instance.ChangePhase(GamePhase.RealTime);
-            return;
-        }
-
         StartCoroutine(ReplayCoroutine(recorder.GetRecordedFramesCopy()));
     }
 
