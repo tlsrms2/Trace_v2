@@ -36,16 +36,6 @@ public class SecondBoss : BaseBoss
     [SerializeField] private int p3BigBulletDamage = 1; 
     [SerializeField] private float p3FireDelay = 0.2f;
 
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-    }
-
     // ───────────────────────────────
     // 패턴 루프 
     // ───────────────────────────────

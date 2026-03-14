@@ -38,11 +38,6 @@ public class FirstBoss : BaseBoss
         if (lineRenderer != null) lineRenderer.enabled = false;
         mainCam = Camera.main;
     }
-
-    protected override void Update()
-    {
-        base.Update();
-    }
     
     private float PhaseBulletSpeed() => CurrentPhase switch
     {
