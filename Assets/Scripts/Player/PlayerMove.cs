@@ -57,6 +57,13 @@ public class PlayerMove : MonoBehaviour
         float y = Input.GetAxisRaw("Vertical");
 
         Vector2 inputDir = new Vector2(x, y).normalized;
-        playerRigidbody.linearVelocity = inputDir * moveSpeed;
+        Vector2 velocity = inputDir * moveSpeed;
+        playerRigidbody.linearVelocity = velocity;
+
+        if (IsTracing && velocity.magnitude > 0)
+        {
+            float distance = velocity.magnitude * Time.fixedUnscaledDeltaTime;
+            GameManager.Instance.ConsumeGauge(distance * GameManager.Instance.GetMoveConsumptionRate());
+        }
     }
 }

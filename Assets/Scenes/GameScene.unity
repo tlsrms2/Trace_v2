@@ -132,6 +132,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5136286948729109972, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
+      propertyPath: moveThreshold
+      value: 0.025
+      objectReference: {fileID: 0}
     - target: {fileID: 5992537981668252337, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1243,7 +1247,8 @@ MonoBehaviour:
   thirdSelectButton: {fileID: 229841232}
   MaxGauge: 100
   CurrentGauge: 100
-  ConsumptionRate: 30
+  MoveConsumptionRate: 10
+  AttackConsumption: 5
   RecoveryRate: 20
   RecoveryStartTime: 0
 --- !u!4 &835026620

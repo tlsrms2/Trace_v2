@@ -109,7 +109,11 @@ public class GhostVisual : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            SpawnAttackMarker(transform.position);
+            float attackCost = GameManager.Instance.GetAttackConsumption();
+            if (GameManager.Instance.GetCurrentGauge() >= attackCost)
+            {
+                SpawnAttackMarker(transform.position);
+            }
         }
     }
 

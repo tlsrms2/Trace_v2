@@ -43,7 +43,8 @@ public class GameManager : MonoBehaviour
     [Header("Gauge Settings")]
     [SerializeField] private float MaxGauge = 100f;
     [SerializeField] private float CurrentGauge;
-    [SerializeField] private float ConsumptionRate = 20f;
+    [SerializeField] private float MoveConsumptionRate = 10f;
+    [SerializeField] private float AttackConsumption = 5f;
     [SerializeField] private float RecoveryRate = 10f;
     [SerializeField] private float RecoveryStartTime = 1f;
 
@@ -63,6 +64,7 @@ public class GameManager : MonoBehaviour
         // Cursor.visible = false;
         // Cursor.lockState = CursorLockMode.Locked;
         OnTraceEnded += StartChargeWait;
+        CurrentGauge = MaxGauge;
     }
 
     private void Start()
@@ -186,18 +188,26 @@ public class GameManager : MonoBehaviour
     #region Gauge Logic
     public float GetCurrentGauge() => CurrentGauge;
     public float GetGaugePercentage() => CurrentGauge / MaxGauge;
+    public float GetMoveConsumptionRate() => MoveConsumptionRate;
+    public float GetAttackConsumption() => AttackConsumption;
+
+    public void ConsumeGauge(float amount)
+    {
+        if (CurrentPhase != GamePhase.Paused) return;
+
+        CurrentGauge -= amount;
+        if (CurrentGauge <= 0)
+        {
+            CurrentGauge = 0;
+            ChangePhase(GamePhase.Replay);
+        }
+    }
 
     private void HandleGauge()
     {
         if (CurrentPhase == GamePhase.Paused)
         {
             canCharge = false;
-            CurrentGauge -= ConsumptionRate * Time.unscaledDeltaTime;
-            if (CurrentGauge <= 0)
-            {
-                CurrentGauge = 0;
-                ChangePhase(GamePhase.Replay);
-            }
         }
 
         if (canCharge)

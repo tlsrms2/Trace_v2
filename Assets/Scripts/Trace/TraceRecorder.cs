@@ -9,6 +9,8 @@ public class TraceRecorder : MonoBehaviour
     [Header("Recording Settings")]
     [Tooltip("초당 기록 프레임 수")]
     [SerializeField] private int fpsTrace = 10;
+    [Tooltip("기록을 위한 최소 이동 거리")]
+    [SerializeField] private float moveThreshold = 0.05f;
 
     public IReadOnlyList<TraceFrame> RecordedFrames => recordedFrames;
     public bool IsRecording { get; private set; }
@@ -18,6 +20,7 @@ public class TraceRecorder : MonoBehaviour
     private float recordTimer;
     private bool attackQueued; // 이번 기록 프레임에 공격을 태그할지 여부
     private Vector3 attackDir; // 이번 기록 프레임의 공격 방향
+    private Vector3 lastRecordedPosition;
 
     private GhostVisual gv;
     private List<GameObject> traceIndicators = new List<GameObject>();
@@ -49,15 +52,20 @@ public class TraceRecorder : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            attackQueued = true;
+            float attackCost = GameManager.Instance.GetAttackConsumption();
+            if (GameManager.Instance.GetCurrentGauge() >= attackCost)
+            {
+                attackQueued = true;
+                GameManager.Instance.ConsumeGauge(attackCost);
 
-            // 마우스 방향 계산
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePos.z = transform.position.z;
-            attackDir = (mousePos - transform.position).normalized;
+                // 마우스 방향 계산
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mousePos.z = transform.position.z;
+                attackDir = (mousePos - transform.position).normalized;
 
-            // 트레이스 중에 임시로 지정된 공격 위치를 보여주는 인디케이터 생성
-            SpawnTraceIndicator(transform.position, attackDir);
+                // 트레이스 중에 임시로 지정된 공격 위치를 보여주는 인디케이터 생성
+                SpawnTraceIndicator(transform.position, attackDir);
+            }
         }
 
         recordTimer += Time.unscaledDeltaTime;
@@ -65,7 +73,13 @@ public class TraceRecorder : MonoBehaviour
         if (recordTimer >= RecordInterval)
         {
             recordTimer -= RecordInterval;
-            RecordFrame();
+            
+            // 움직임이 있거나 공격이 예약된 경우에만 기록
+            float dist = Vector3.Distance(transform.position, lastRecordedPosition);
+            if (dist >= moveThreshold || attackQueued)
+            {
+                RecordFrame();
+            }
         }
     }
 
@@ -97,6 +111,7 @@ public class TraceRecorder : MonoBehaviour
         recordTimer = 0f;
         attackQueued = false;
         IsRecording = true;
+        lastRecordedPosition = transform.position;
 
         RecordFrame();
     }
@@ -122,6 +137,7 @@ public class TraceRecorder : MonoBehaviour
         );
 
         recordedFrames.Add(frame);
+        lastRecordedPosition = transform.position;
         
         gv.SpawnTrailGhost();
     }
