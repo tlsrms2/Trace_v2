@@ -21,16 +21,13 @@ public class GameManager : MonoBehaviour
     public bool isPaused => CurrentPhase == GamePhase.Paused;
 
     private string playerName;
-    private bool secondPanelReady = false; // 두 번째 패널 엔터 체크용
 
     [Header("UI Settings")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject clearText;
     [SerializeField] private GameObject timerText;
     [SerializeField] private GameObject gameClearPanel;
-    [SerializeField] private GameObject firstClearPanel;
-    [SerializeField] private GameObject secondClearPanel;
-    [SerializeField] private GameObject thirdClearPanel;
+    [SerializeField] private GameObject menuPanel;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private TMP_InputField nameInputField;
 
@@ -86,28 +83,12 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space) && CurrentPhase == GamePhase.Paused)
             ChangePhase(GamePhase.Replay);
 
-        if (Input.GetKeyDown(KeyCode.R) && !firstClearPanel.activeSelf)
+        if (Input.GetKeyDown(KeyCode.R))
         {
             RestartGame();
         }
 
         HandleGauge();
-
-        // 두 번째 패널 엔터 입력
-        // Update() 안 두 번째 패널 엔터 입력 처리
-        if (secondPanelReady && secondClearPanel != null && secondClearPanel.activeSelf && Input.GetKeyDown(KeyCode.Return))
-        {
-            secondClearPanel.SetActive(false);
-            thirdClearPanel.SetActive(true);
-
-            clearText?.SetActive(true);
-            timerText?.SetActive(true);
-
-            // ✅ 세 번째 패널에서 Restart 버튼 포커스 설정
-            SetUIFocus(thirdSelectButton); // 혹은 thirdPanel에서 사용할 버튼 지정
-
-            secondPanelReady = false; // 다시 초기화
-        }
     }
 
     #region Game Flow & Phase Control
@@ -187,37 +168,10 @@ public class GameManager : MonoBehaviour
         if (gameClearPanel != null)
         {
             gameClearPanel.SetActive(true);
-            firstClearPanel.SetActive(true);
-            SetUIFocus(firstGameClearInputButton);
+            SetUIFocus(thirdSelectButton);
         }
         OnGameClear?.Invoke();
     }
-
-    // 첫 번째 패널 제출
-    public void OnFirstPanelSubmit()
-    {
-        playerName = nameInputField.text;
-        if (string.IsNullOrEmpty(playerName))
-            playerName = "Unnamed";
-
-        firstClearPanel.SetActive(false);
-        secondClearPanel.SetActive(true);
-
-        clearText.SetActive(false);
-        timerText.SetActive(false);
-
-        EventSystem.current.SetSelectedGameObject(null);
-
-        // 한 프레임 딜레이 후 두 번째 패널 엔터 가능
-        StartCoroutine(EnableSecondPanelInputNextFrame());
-    }
-
-    private IEnumerator EnableSecondPanelInputNextFrame()
-    {
-        yield return null;
-        secondPanelReady = true;
-    }
-
 
     private void SetUIFocus(GameObject firstSelected)
     {

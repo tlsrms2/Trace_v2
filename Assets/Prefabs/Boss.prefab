@@ -394,8 +394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f41cbc57aba5bba40812b54f71138a64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
-  maxHp: 100
-  speed: 20
+  maxHp: 300
+  speed: 25
   damagedParticle: {fileID: 7710619616481920721, guid: 3c0bd7c7aeb700f47b7af6d70d4c39e7, type: 3}
   introDownDistance: 9
   introDuration: 2

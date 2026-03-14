@@ -86,7 +86,6 @@ public abstract class BaseBoss : MonoBehaviour
         {
             CurrentPhase = newPhase;
             OnPhaseChanged?.Invoke(CurrentPhase);
-            StartCoroutine(PhaseFlashEffect());
             AudioManager.Instance.PlayBossAppear();
         }
     }
@@ -109,8 +108,6 @@ public abstract class BaseBoss : MonoBehaviour
         else
         {
             var particle = Instantiate(damagedParticle, transform.position, Quaternion.identity);
-            ParticleSystem ps = particle.GetComponent<ParticleSystem>();
-            var main = ps.main;
         }
     }
 
@@ -123,15 +120,13 @@ public abstract class BaseBoss : MonoBehaviour
         WaveManager.Instance?.OnEnemyKilled();
         AudioManager.Instance.PlayBossDeath();
 
-        Destroy(gameObject);
-    }
+        var particle = Instantiate(damagedParticle, transform.position, Quaternion.identity);
+            ParticleSystem ps = particle.GetComponent<ParticleSystem>();
+            var main = ps.main;
+            main.startColor = Color.red;
+            main.startSize = new ParticleSystem.MinMaxCurve(main.startSize.constantMin * 2, main.startSize.constantMax * 2);
 
-    // ───────────────────────────────
-    // 자식 클래스에서 충돌 처리를 구현
-    // ───────────────────────────────
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        // 보스는 이제 TraceReplayer의 PerformAttack에서 직접 TakeDamage 호출을 받습니다.
+        Destroy(gameObject);
     }
 
     // ───────────────────────────────
@@ -145,21 +140,6 @@ public abstract class BaseBoss : MonoBehaviour
             if (GameManager.Instance.CurrentPhase != GamePhase.Paused)
                 timer += Time.deltaTime;
             yield return null;
-        }
-    }
-
-    // ───────────────────────────────
-    // 페이즈 전환 플래시 연출
-    // ───────────────────────────────
-    private IEnumerator PhaseFlashEffect()
-    {
-        Color original = spriteRenderer.color;
-        for (int i = 0; i < 3; i++)
-        {
-            spriteRenderer.color = Color.red;
-            yield return new WaitForSecondsRealtime(0.1f);
-            spriteRenderer.color = original;
-            yield return new WaitForSecondsRealtime(0.1f);
         }
     }
 
