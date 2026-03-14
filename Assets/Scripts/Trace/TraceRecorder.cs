@@ -89,16 +89,7 @@ public class TraceRecorder : MonoBehaviour
         indicator.transform.position = pos + dir * 1.5f; // attackRange
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         indicator.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        SpriteRenderer sr = indicator.AddComponent<SpriteRenderer>();
-        // 임시로 사각형 스프라이트 생성 처리 (빌트인)
-        Texture2D tex = new Texture2D(1, 1);
-        tex.SetPixel(0, 0, Color.white);
-        tex.Apply();
-        sr.sprite = Sprite.Create(tex, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f));
-        sr.color = new Color(1f, 0.3f, 0.3f, 0.6f);
-        indicator.transform.localScale = new Vector3(2f, 1f, 1f);
-
+        
         traceIndicators.Add(indicator);
     }
 
