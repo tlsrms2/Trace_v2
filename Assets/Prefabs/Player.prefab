@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d46b417caf100a74080a63721df04ed2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TraceReplayer
-  replaySpeedMultiplier: 2
+  replaySpeedMultiplier: 2.5
   playerAttack: {fileID: 8099390614956547802}
   ghostOverlapThreshold: 0.3
 --- !u!114 &4646295380864483791
@@ -250,6 +250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4576727935380120419}
   - component: {fileID: 1030166509527551422}
+  - component: {fileID: 2219000670384313264}
   - component: {fileID: 3497068337536716883}
   - component: {fileID: 8099390614956547802}
   m_Layer: 0
@@ -268,8 +269,8 @@ Transform:
   m_GameObject: {fileID: 7745076003793085672}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.732, z: 0}
-  m_LocalScale: {x: 0.8965814, y: 1.6718746, z: 2.3782}
+  m_LocalPosition: {x: 0, y: 1.545, z: 0}
+  m_LocalScale: {x: 0.29909956, y: 3.2983887, z: 2.3782}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5992537981668252337}
@@ -333,6 +334,33 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!50 &2219000670384313264
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7745076003793085672}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!61 &3497068337536716883
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -391,5 +419,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06883392e7dad224483314d0370aff7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  activeTime: 0.1
+  activeTime: 0.15
   damage: 10
+  swingAngle: 180

@@ -133,16 +133,10 @@ public class PlayerHealth : MonoBehaviour
         if (spriteRenderer != null) spriteRenderer.enabled = false;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.TryGetComponent<BaseBoss>(out var boss))
-        {
-            TakeDamage(1); 
-        }
-    }
-    
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (GameManager.Instance.CurrentPhase == GamePhase.Paused) return;
+        
         if (collision.gameObject.TryGetComponent<BaseBoss>(out var boss))
         {
             TakeDamage(1);

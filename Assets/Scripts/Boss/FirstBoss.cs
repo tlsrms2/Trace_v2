@@ -11,7 +11,7 @@ public struct specialAttackInfo
 /// <summary>
 /// 첫 번째 보스. BaseBoss를 상속받아 대쉬/탄막/특수 레이저 패턴을 구현합니다.
 /// </summary>
-public class BossEnemy : BaseBoss
+public class FirstBoss : BaseBoss
 {
     [Header("패턴2: 탄막")]
     [SerializeField] private int bulletDamage = 5;
@@ -39,6 +39,11 @@ public class BossEnemy : BaseBoss
         mainCam = Camera.main;
     }
 
+    protected override void Update()
+    {
+        base.Update();
+    }
+    
     private float PhaseBulletSpeed() => CurrentPhase switch
     {
         BossPhase.Phase2 => bulletSpeed * 1.4f,

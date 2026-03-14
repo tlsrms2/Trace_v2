@@ -12,6 +12,11 @@ public enum BossPhase { Phase1, Phase2, Phase3 }
 
 public abstract class BaseBoss : MonoBehaviour
 {
+    [Header("페이즈별 색")]
+    [SerializeField] protected Color phase1Color;
+    [SerializeField] protected Color phase2Color;
+    [SerializeField] protected Color phase3Color;
+
     [Header("기본 스탯")]
     [SerializeField] protected float maxHp = 100f;
     [SerializeField] protected float speed = 3f;
@@ -65,6 +70,7 @@ public abstract class BaseBoss : MonoBehaviour
     protected virtual void Update()
     {
         CheckPhaseTransition();
+        ChangeColor();
     }
 
     // ───────────────────────────────
@@ -87,6 +93,20 @@ public abstract class BaseBoss : MonoBehaviour
             CurrentPhase = newPhase;
             OnPhaseChanged?.Invoke(CurrentPhase);
             AudioManager.Instance.PlayBossAppear();
+        }
+    }
+
+    // ───────────────────────────────
+    // 색 변경
+    // ───────────────────────────────
+    private void ChangeColor()
+    {
+        switch (CurrentPhase)
+        {
+            case BossPhase.Phase1: spriteRenderer.color = phase1Color; return;
+            case BossPhase.Phase2: spriteRenderer.color = phase2Color; return;
+            case BossPhase.Phase3: spriteRenderer.color = phase3Color; return;
+            default: return;
         }
     }
 

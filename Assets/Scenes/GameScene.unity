@@ -132,14 +132,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4576727935380120419, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.29909956
-      objectReference: {fileID: 0}
-    - target: {fileID: 4576727935380120419, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5992537981668252337, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -184,21 +176,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 8099390614956547802, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
-      propertyPath: activeTime
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8099390614956547802, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
-      propertyPath: swingAngle
-      value: 180
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7745076003793085672, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 726846500}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
 --- !u!1 &111536110 stripped
 GameObject:
@@ -1182,38 +1163,6 @@ RectTransform:
   m_AnchoredPosition: {x: 500, y: 355}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &726846494 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7745076003793085672, guid: 50d3c782e60082f4b8908ef5909ed456, type: 3}
-  m_PrefabInstance: {fileID: 72363533}
-  m_PrefabAsset: {fileID: 0}
---- !u!50 &726846500
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 726846494}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &770580033
 GameObject:
   m_ObjectHideFlags: 0
@@ -3289,8 +3238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df133c93f12205f46a6d21d9bae15fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveManager
-  bossPrefab: {fileID: 6892968917303159334, guid: 03fd80b75aef24c449282b960b0651dd, type: 3}
-  bossSpawnPosition: {x: 0, y: 0, z: 0}
+  bossPrefab: {fileID: 6892968917303159334, guid: 9506c846c483d4e43a78780aa07a7ff7, type: 3}
+  bossSpawnPosition: {x: 0, y: 4.5, z: 0}
 --- !u!4 &2084464468
 Transform:
   m_ObjectHideFlags: 0

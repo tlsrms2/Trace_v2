@@ -64,13 +64,15 @@ public class BossBullet : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
+        if (GameManager.Instance.CurrentPhase == GamePhase.Paused) return;
+        
         if (collision.gameObject.CompareTag("Wall"))
         {
             bounceCount++;
 
             if (bounceCount > maxBounce)
             {
-                Destroy(gameObject);
+                Destroy(gameObject, 1f);
                 return;
             }
 
@@ -90,25 +92,6 @@ public class BossBullet : MonoBehaviour
         {
             playerHp.TakeDamage(damage);
             Destroy(gameObject);
-        }
-
-        Vector2 knockbackDirection = Vector2.zero;
-        if (collision.TryGetComponent(out PlayerAttack _) && collision.gameObject.CompareTag("Player"))
-        {
-            if (shooterTransform != null)
-            {
-                knockbackDirection = (shooterTransform.position - transform.position).normalized;
-            }
-            else
-            {
-                knockbackDirection = -rb.linearVelocity.normalized;
-            }
-
-            rb.linearVelocity = knockbackDirection * speed * 1.5f;
-            col.isTrigger = true;
-
-            float angle = Mathf.Atan2(knockbackDirection.y, knockbackDirection.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
     }
 

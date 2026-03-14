@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7966620963246633777}
   - component: {fileID: 7702635908788060125}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: Bounce_Bullet
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 0.87843144, g: 0.20784315, b: 0.20784315, a: 1}
+  m_Color: {r: 0.8773585, g: 0.2027857, b: 0.2027857, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -184,6 +184,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossBullet
   speed: 8
-  maxBounce: 0
+  maxBounce: 2
   damage: 5
   lifetime: 4
