@@ -62,6 +62,8 @@ public class PlayerHealth : MonoBehaviour
 
         OnHpChanged?.Invoke(currentHp, maxHp);
 
+        var particle = Instantiate(damagedParticle, transform.position, Quaternion.identity);
+        
         if (currentHp <= 0)
         {
             UpdatePlayerColor();
@@ -69,7 +71,6 @@ public class PlayerHealth : MonoBehaviour
         }
         else
         {
-            var particle = Instantiate(damagedParticle, transform.position, Quaternion.identity);
             invincibilityTimer = invincibilityDuration;
             StartCoroutine(FlashEffect());
         }
