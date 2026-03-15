@@ -459,8 +459,8 @@ MonoBehaviour:
   damagedParticle: {fileID: 7710619616481920721, guid: 3c0bd7c7aeb700f47b7af6d70d4c39e7, type: 3}
   introDownDistance: 10
   introDuration: 2
-  phase2Threshold: 1
-  phase3Threshold: 1
+  phase2Threshold: 0.7
+  phase3Threshold: 0.35
   bulletPrefab: {fileID: 3257211389862254461, guid: 7b5cac81d24bb4b43b75fdeeaa93e648, type: 3}
   dashSpeed: 25
   bulletDamage: 5

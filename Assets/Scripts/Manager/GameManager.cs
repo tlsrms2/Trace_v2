@@ -79,6 +79,13 @@ public class GameManager : MonoBehaviour
             RestartGame();
         }
 
+        // 디버깅용: F12를 누르면 모든 저장 데이터를 초기화합니다.
+        if (Input.GetKeyDown(KeyCode.F12))
+        {
+            PlayerPrefs.DeleteAll();
+            Debug.Log("모든 진행도 데이터(PlayerPrefs)가 초기화되었습니다! 게임을 재시작하면 자물쇠가 잠깁니다.");
+        }
+
         HandleGauge();
     }
 
