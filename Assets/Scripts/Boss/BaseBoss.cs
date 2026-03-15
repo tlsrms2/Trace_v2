@@ -49,6 +49,7 @@ public abstract class BaseBoss : MonoBehaviour
     protected Collider2D col;
     protected Vector2 originalPosition;
     protected Vector3 originalScale;
+    protected bool isInvincible = false;
 
     protected virtual void Awake()
     {
@@ -116,7 +117,7 @@ public abstract class BaseBoss : MonoBehaviour
     // ───────────────────────────────
     public void TakeDamage(int damage)
     {
-        if (IsDead) return;
+        if (IsDead || isInvincible) return;
 
         Hp -= damage;
         Hp = Mathf.Max(Hp, 0f);
@@ -169,6 +170,8 @@ public abstract class BaseBoss : MonoBehaviour
     // ───────────────────────────────
     private IEnumerator BossIntroSequence()
     {
+        isInvincible = true; // 인트로 시작 시 무적 적용
+        
         AudioManager.Instance.PlayBossAppear();
 
         Vector2 startPos = originalPosition + (Vector2.up * introDownDistance);
@@ -192,6 +195,7 @@ public abstract class BaseBoss : MonoBehaviour
         yield return StartCoroutine(ShowWarningEffect(1f));
         yield return StartCoroutine(PausedWait(1f));
 
+        isInvincible = false; // 인트로 종료 시 무적 해제
         StartCoroutine(PatternLoop());
     }
 
