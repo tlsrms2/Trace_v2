@@ -51,12 +51,10 @@ public class BombBullet : MonoBehaviour
             {
                 // 스프라이트의 실제 크기를 고려하여 지름(radius * 2)에 맞게 스케일 자동 조정
                 float scale = (explosionRadius * 2f) / spriteSize;
-                warningObj.transform.localScale = new Vector3(scale, scale, 1f);
+                // 부모(BombBullet) 오브젝트의 Scale에 영향을 받지 않도록 LossyScale로 나누어 보정합니다.
+                warningObj.transform.localScale = new Vector3(
+                    scale / transform.lossyScale.x, scale / transform.lossyScale.y, 1f);
             }
-        }
-        else
-        {
-            Debug.LogWarning("[BombBullet] 경고 범위를 표시할 원형 스프라이트(Circle Sprite)가 할당되지 않았습니다!");
         }
     }
 
@@ -102,8 +100,7 @@ public class BombBullet : MonoBehaviour
             }
         }
 
-        // TODO: 파티클 생성 및 폭발음 사운드 재생 (필요 시 추가)
-        // AudioManager.Instance.PlayBossDeath();
+        AudioManager.Instance.PlayEnemyDeath();
 
         Destroy(gameObject);
     }
