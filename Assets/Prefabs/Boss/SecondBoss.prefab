@@ -284,15 +284,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecondBoss
   phase1Color: {r: 0.7169647, g: 0.6014151, b: 0.8018868, a: 1}
-  phase2Color: {r: 0.42505938, g: 0.26067996, b: 0.5471698, a: 1}
-  phase3Color: {r: 0.31711665, g: 0.097588114, b: 0.4811321, a: 1}
-  maxHp: 200
+  phase2Color: {r: 0.6919937, g: 0.28773582, b: 1, a: 1}
+  phase3Color: {r: 0.5714288, g: 0, b: 1, a: 1}
+  maxHp: 100
   speed: 3
   damagedParticle: {fileID: 7710619616481920721, guid: 3c0bd7c7aeb700f47b7af6d70d4c39e7, type: 3}
   introDownDistance: 5
   introDuration: 2
-  phase2Threshold: 0.75
-  phase3Threshold: 0.5
+  phase2Threshold: 0.7
+  phase3Threshold: 0.35
   bulletPrefab: {fileID: 3257211389862254461, guid: d81782e3d4150394aa0d8b64d70eeebe, type: 3}
   bigBulletPrefab: {fileID: 3257211389862254461, guid: 5b89ba1a9cfce4f44aeb8411cbab786f, type: 3}
   p1Muzzles:
