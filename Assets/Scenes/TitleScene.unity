@@ -511,9 +511,7 @@ MonoBehaviour:
   clearText: {fileID: 0}
   timerText: {fileID: 0}
   gameClearPanel: {fileID: 0}
-  menuPanel: {fileID: 0}
   pauseMenu: {fileID: 0}
-  nameInputField: {fileID: 0}
   MaxGauge: 100
   CurrentGauge: 0
   MoveConsumptionRate: 10

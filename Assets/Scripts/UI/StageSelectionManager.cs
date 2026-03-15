@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
+using TMPro;
 
 public class StageSelectionManager : MonoBehaviour
 {
@@ -10,12 +12,32 @@ public class StageSelectionManager : MonoBehaviour
     [Header("게임 씬 이름")]
     [SerializeField] private string gameSceneName = "GameScene"; // 모든 보스가 로드될 단일 게임 씬
 
+    [SerializeField] private Image[] lockers;
+    [SerializeField] private TextMeshProUGUI[] details;
+    private String[] descriptions =
+    {
+        "Golem\nAggressive",
+        "Ranger\nShooting",
+        "Ninja\nTrace"
+    };
+
     private void Start()
     {
         Debug.Log("StageSelectionManager Start() called.");
 
         // 저장된 언락 데이터 로드 (데이터가 없으면 1번 스테이지가 기본)
         int unlockedStage = PlayerPrefs.GetInt("UnlockedStage", 1);
+
+        for (int i = 0; i < lockers.Length; i++)
+        {
+            int stageNum = i + 1;
+
+            if (stageNum <= unlockedStage)
+            {
+                lockers[i].gameObject.SetActive(false);
+                details[i].text = descriptions[i];
+            }
+        }
 
         for (int i = 0; i < stageButtons.Length; i++)
         {

@@ -127,10 +127,11 @@ public class FirstBoss : BaseBoss
             yield return null;
 
         isColorOverridden = true;
+        Color originalColor = spriteRenderer.color;
         overrideColor = Color.red;
         yield return StartCoroutine(PausedWait(0.25f));
 
-        overrideColor = Color.green;
+        overrideColor = originalColor;
         float dashDuration = 0.25f;
         float elapsed = 0f;
 

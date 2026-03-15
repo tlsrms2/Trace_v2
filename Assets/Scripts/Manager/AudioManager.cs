@@ -61,6 +61,12 @@ public class AudioManager : MonoBehaviour
     public void PlayTitleBgm() => PlayBgm(titleBgm);
     public void PlayIngameBgm() => PlayBgm(ingameBgm);
 
+    public void StopBgm()
+    {
+        bgmSource.Stop();
+        bgmSource.clip = null;
+    }
+
     // 시간 멈출 때
     public void SetSlowBgm()
     {

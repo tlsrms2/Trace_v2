@@ -28,9 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject clearText;
     [SerializeField] private GameObject timerText;
     [SerializeField] private GameObject gameClearPanel;
-    [SerializeField] private GameObject menuPanel;
     [SerializeField] private GameObject pauseMenu;
-    [SerializeField] private TMP_InputField nameInputField;
 
     [Header("Gauge Settings")]
     [SerializeField] private float MaxGauge = 100f;
@@ -207,6 +205,7 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         Time.timeScale = 1f;
+        if (AudioManager.Instance != null) AudioManager.Instance.StopBgm();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
