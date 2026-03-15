@@ -21,7 +21,10 @@ public class WaveManager : MonoBehaviour
     public event Action<float, float> OnBossHpUpdated;  // (현재HP, 최대HP)
 
     [Header("보스 설정")]
-    [SerializeField] private GameObject bossPrefab;
+    [Tooltip("현재 스테이지 번호 (1, 2, 3...)")]
+    [SerializeField] private int currentStageLevel = 1; // 이 필드는 이제 GameManager.SelectedStageIndex에 의해 설정됩니다.
+    [SerializeField] private GameObject[] bossPrefabs; // 여러 보스 프리팹
+    [SerializeField] private Vector3[] bossSpawnPositions; // 각 보스의 소환 위치
     [SerializeField] private Vector3 bossSpawnPosition = Vector3.zero;
 
     private bool bossAlive = false;
@@ -42,16 +45,22 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator SpawnBoss()
     {
-        // 씬 로드 직후 1프레임 대기 (다른 오브젝트 초기화 보장)
+        // GameManager에서 선택한 인덱스를 기반으로 스테이지 레벨 설정
+        currentStageLevel = GameManager.SelectedStageIndex + 1;
+
         yield return null;
 
-        if (bossPrefab == null)
+        int bossIndex = currentStageLevel - 1;
+        if (bossIndex < 0 || bossIndex >= bossPrefabs.Length) bossIndex = 0;
+
+        // 해당 보스의 전용 소환 위치 가져오기
+        Vector3 spawnPos = bossSpawnPosition;
+        if (bossIndex < bossSpawnPositions.Length)
         {
-            Debug.LogError("[WaveManager] bossPrefab이 설정되지 않았습니다.");
-            yield break;
+            spawnPos = bossSpawnPositions[bossIndex];
         }
 
-        GameObject bossObj = Instantiate(bossPrefab, bossSpawnPosition, Quaternion.identity);
+        GameObject bossObj = Instantiate(bossPrefabs[bossIndex], spawnPos, Quaternion.identity);
         BaseBoss boss = bossObj.GetComponent<BaseBoss>();
 
         if (boss != null)
@@ -74,6 +83,15 @@ public class WaveManager : MonoBehaviour
         if (!bossAlive) return;
 
         bossAlive = false;
+
+        // 현재 깬 스테이지가 가장 최근에 열린 스테이지라면 다음 스테이지 언락
+        int currentUnlocked = PlayerPrefs.GetInt("UnlockedStage", 1);
+        if (currentStageLevel >= currentUnlocked)
+        {
+            PlayerPrefs.SetInt("UnlockedStage", currentStageLevel + 1);
+            PlayerPrefs.Save();
+        }
+
         GameManager.Instance.GameClear();
     }
 }

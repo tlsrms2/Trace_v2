@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public event Action OnGameClear;
     public event Action OnTraceStarted;
     public event Action OnTraceEnded;
+    public static int SelectedStageIndex = 0; // 선택된 스테이지 인덱스 (0부터 시작)
 
     public bool IsPaused { get; private set; }
     public GamePhase CurrentPhase = GamePhase.RealTime;
@@ -30,15 +31,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject menuPanel;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private TMP_InputField nameInputField;
-
-    [Header("UI Keyboard Focus Settings")]
-    [SerializeField] private GameObject firstTitleButton;
-    [SerializeField] private GameObject firstPauseButton;
-    [SerializeField] private GameObject firstGameOverButton;
-    [SerializeField] private GameObject firstGameClearInputButton;
-    [SerializeField] private GameObject secondClearButton;
-    [SerializeField] private GameObject thirdSelectButton;
-
 
     [Header("Gauge Settings")]
     [SerializeField] private float MaxGauge = 100f;
@@ -69,7 +61,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        TitleUIFocus();
     }
 
     private void Update()
@@ -121,12 +112,6 @@ public class GameManager : MonoBehaviour
         else PauseGame();
     }
 
-    public void TitleUIFocus()
-    {
-        if (firstTitleButton != null)
-            SetUIFocus(firstTitleButton);
-    }
-
     public void PauseGame()
     {
         IsPaused = true;
@@ -134,7 +119,6 @@ public class GameManager : MonoBehaviour
         if (pauseMenu != null)
         {
             pauseMenu.SetActive(true);
-            SetUIFocus(firstPauseButton);
         }
     }
 
@@ -145,7 +129,6 @@ public class GameManager : MonoBehaviour
         if (pauseMenu != null)
         {
             pauseMenu.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 
@@ -161,7 +144,6 @@ public class GameManager : MonoBehaviour
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
-            SetUIFocus(firstGameOverButton);
         }
     }
 
@@ -170,18 +152,8 @@ public class GameManager : MonoBehaviour
         if (gameClearPanel != null)
         {
             gameClearPanel.SetActive(true);
-            SetUIFocus(thirdSelectButton);
         }
         OnGameClear?.Invoke();
-    }
-
-    private void SetUIFocus(GameObject firstSelected)
-    {
-        if (firstSelected != null && EventSystem.current != null)
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(firstSelected);
-        }
     }
     #endregion
 
@@ -247,7 +219,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("StageSelectScene");
     }
 
     public void QuitGame()
