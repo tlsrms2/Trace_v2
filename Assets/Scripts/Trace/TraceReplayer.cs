@@ -17,7 +17,6 @@ public class TraceReplayer : MonoBehaviour
     [Tooltip("Player의 자식 오브젝트에 있는 PlayerAttack 컴포넌트")]
     [SerializeField] private PlayerAttack playerAttack;
 
-
     public bool IsReplaying { get; private set; }
 
     public event Action OnReplayFinished;
@@ -46,14 +45,14 @@ public class TraceReplayer : MonoBehaviour
 
     private void OnTraceEnded()
     {
-        StartCoroutine(ReplayCoroutine(recorder.GetRecordedFramesCopy()));
+        StartCoroutine(ReplayCoroutine(recorder.GetRecordedFramesCopy(), recorder.GetRecordedAttacksCopy()));
     }
 
     [Header("Ghost Trail Settings")]
     [Tooltip("플레이어와 잔상이 이 거리 이내면 잔상을 소멸시킴")]
     [SerializeField] private float ghostOverlapThreshold = 0.3f;
 
-    private IEnumerator ReplayCoroutine(List<TraceFrame> frames)
+    private IEnumerator ReplayCoroutine(List<TraceFrame> frames, List<TraceAttackData> attacks)
     {
         IsReplaying = true;
         int frameCount = frames.Count;
@@ -61,7 +60,8 @@ public class TraceReplayer : MonoBehaviour
         // 원본 기록 간격을 배속으로 나누어 실제 재생 프레임 간격 계산
         float frameInterval = recorder.RecordInterval / replaySpeedMultiplier;
 
-        HashSet<int> attackedFrameIndices = new HashSet<int>();
+        float replayElapsed = 0f; // 배속을 고려한 원본 경과 시간
+        int attackIndex = 0;      // 실행 대기 중인 공격의 인덱스
 
         // 잔상 리스트 가져오기
         List<GameObject> ghostList = gv.GetGhostListCopy();
@@ -76,6 +76,14 @@ public class TraceReplayer : MonoBehaviour
             while (segmentElapsed < frameInterval)
             {
                 segmentElapsed += Time.deltaTime;
+                replayElapsed += Time.deltaTime * replaySpeedMultiplier; 
+
+                // 현재 진행 시간에 도달한 공격이 있으면 독립적으로 발동
+                while (attackIndex < attacks.Count && replayElapsed >= attacks[attackIndex].time)
+                {
+                    PerformAttack(attacks[attackIndex].position, attacks[attackIndex].attackDirection);
+                    attackIndex++;
+                }
 
                 float t = Mathf.Clamp01(segmentElapsed / frameInterval);
 
@@ -90,12 +98,19 @@ public class TraceReplayer : MonoBehaviour
 
             transform.position = to.position;
             transform.rotation = to.rotation;
-
-            if (to.action == TraceAction.ATTACK && !attackedFrameIndices.Contains(i + 1))
+        }
+        
+        // 리플레이 이동이 모두 끝났으나 아직 발동되지 않은 마지막 공격들이 있다면 기록된 시간에 맞춰 발동
+        while (attackIndex < attacks.Count)
+        {
+            while (replayElapsed < attacks[attackIndex].time)
             {
-                attackedFrameIndices.Add(i + 1);
-                PerformAttack(to.position, to.attackDirection);
+                replayElapsed += Time.deltaTime * replaySpeedMultiplier; 
+                RemoveOverlappingGhosts(ghostList);
+                yield return null;
             }
+            PerformAttack(attacks[attackIndex].position, attacks[attackIndex].attackDirection);
+            attackIndex++;
         }
 
         // 혹시 남은 잔상 전부 제거
@@ -134,4 +149,3 @@ public class TraceReplayer : MonoBehaviour
         }
     }
 }
-

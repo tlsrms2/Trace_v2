@@ -10,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
 {
     [Header("Player HP Settings")]
     [SerializeField] private int maxHp = 3;
+    [SerializeField] private GameObject damagedParticle;
     private int currentHp;
 
     public int MaxHp => maxHp;
@@ -68,6 +69,7 @@ public class PlayerHealth : MonoBehaviour
         }
         else
         {
+            var particle = Instantiate(damagedParticle, transform.position, Quaternion.identity);
             invincibilityTimer = invincibilityDuration;
             StartCoroutine(FlashEffect());
         }

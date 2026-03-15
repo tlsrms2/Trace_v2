@@ -42,7 +42,7 @@ public class PlayerAttack : MonoBehaviour
         {
             timer += Time.deltaTime;
             
-            float t = activeTime > 0f ? timer / activeTime : 1f;
+            float t = timer / activeTime;
             float currentAngle = Mathf.Lerp(startAngle, endAngle, t);
             
             // 현재 각도를 이용한 방향 벡터

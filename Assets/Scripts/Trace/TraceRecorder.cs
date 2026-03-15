@@ -13,13 +13,14 @@ public class TraceRecorder : MonoBehaviour
     [SerializeField] private float moveThreshold = 0.05f;
 
     public IReadOnlyList<TraceFrame> RecordedFrames => recordedFrames;
+    public IReadOnlyList<TraceAttackData> RecordedAttacks => recordedAttacks;
     public bool IsRecording { get; private set; }
 
     public List<TraceFrame> recordedFrames = new List<TraceFrame>();
+    public List<TraceAttackData> recordedAttacks = new List<TraceAttackData>();
     public float RecordInterval { get; private set; }
     private float recordTimer;
-    private bool attackQueued; // 이번 기록 프레임에 공격을 태그할지 여부
-    private Vector3 attackDir; // 이번 기록 프레임의 공격 방향
+    private float totalElapsedRecordTime; // 트레이스 시작 후 총 경과 시간
     private Vector3 lastRecordedPosition;
 
     private GhostVisual gv;
@@ -49,22 +50,28 @@ public class TraceRecorder : MonoBehaviour
     private void Update()
     {
         if (!IsRecording) return;
+        
+        totalElapsedRecordTime += Time.unscaledDeltaTime;
 
         if (Input.GetMouseButtonDown(0))
         {
             float attackCost = GameManager.Instance.GetAttackConsumption();
             if (GameManager.Instance.GetCurrentGauge() >= attackCost)
             {
-                attackQueued = true;
                 GameManager.Instance.ConsumeGauge(attackCost);
 
                 // 마우스 방향 계산
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mousePos.z = transform.position.z;
-                attackDir = (mousePos - transform.position).normalized;
-
-                // 트레이스 중에 임시로 지정된 공격 위치를 보여주는 인디케이터 생성
-                SpawnTraceIndicator(transform.position, attackDir);
+                Vector3 currentAttackDir = (mousePos - transform.position).normalized;
+                
+                // 클릭 즉시 공격 데이터를 독립적으로 새겨놓음
+                recordedAttacks.Add(new TraceAttackData
+                {
+                    time = totalElapsedRecordTime,
+                    position = transform.position,
+                    attackDirection = currentAttackDir
+                });
             }
         }
 
@@ -74,33 +81,24 @@ public class TraceRecorder : MonoBehaviour
         {
             recordTimer -= RecordInterval;
             
-            // 움직임이 있거나 공격이 예약된 경우에만 기록
+            // 움직임이 있는 경우에만 위치 프레임 기록
             float dist = Vector3.Distance(transform.position, lastRecordedPosition);
-            if (dist >= moveThreshold || attackQueued)
+            if (dist >= moveThreshold)
             {
                 RecordFrame();
             }
         }
     }
 
-    private void SpawnTraceIndicator(Vector3 pos, Vector3 dir)
-    {
-        GameObject indicator = new GameObject("TraceAttackIndicator");
-        indicator.transform.position = pos + dir * 1.5f; // attackRange
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        indicator.transform.rotation = Quaternion.Euler(0, 0, angle);
-        
-        traceIndicators.Add(indicator);
-    }
-
     public void StartRecording()
     {
         recordedFrames.Clear();
+        recordedAttacks.Clear();
         foreach (var ind in traceIndicators) if (ind != null) Destroy(ind);
         traceIndicators.Clear();
 
         recordTimer = 0f;
-        attackQueued = false;
+        totalElapsedRecordTime = 0f;
         IsRecording = true;
         lastRecordedPosition = transform.position;
 
@@ -116,15 +114,11 @@ public class TraceRecorder : MonoBehaviour
 
     private void RecordFrame()
     {
-        TraceAction action = attackQueued ? TraceAction.ATTACK : TraceAction.MOVE;
-        Vector3 dir = attackQueued ? attackDir : Vector3.zero;
-        attackQueued = false;
-
         TraceFrame frame = new TraceFrame(
             transform.position,
             transform.rotation,
-            action,
-            dir
+            TraceAction.MOVE,
+            Vector3.zero
         );
 
         recordedFrames.Add(frame);
@@ -136,5 +130,10 @@ public class TraceRecorder : MonoBehaviour
     public List<TraceFrame> GetRecordedFramesCopy()
     {
         return new List<TraceFrame>(recordedFrames);
+    }
+
+    public List<TraceAttackData> GetRecordedAttacksCopy()
+    {
+        return new List<TraceAttackData>(recordedAttacks);
     }
 }

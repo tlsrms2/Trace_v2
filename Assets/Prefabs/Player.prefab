@@ -189,7 +189,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TraceRecorder
   fpsTrace: 6
+  moveThreshold: 0.05
   recordedFrames: []
+  recordedAttacks: []
 --- !u!114 &3193138784171039048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,8 +223,8 @@ MonoBehaviour:
   ghostColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.72156864}
   trailSpawnInterval: 0.05
   trailFadeDuration: 0.3
-  attackMarkerSpriteRenderer: {fileID: 5879673273813815623}
-  attackMarkerColor: {r: 1, g: 0.89109194, b: 0.2980392, a: 0.7}
+  attackMarkerPrefab: {fileID: 4314618813025576671, guid: ff2fb95c144087d48b8c4c028bcbd993, type: 3}
+  attackMarkerColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
 --- !u!114 &6828996676019786366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,6 +238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHp: 3
+  damagedParticle: {fileID: 7710619616481920721, guid: ac9e6f9b16fe61d4cba48d58fdb4c43e, type: 3}
   invincibilityDuration: 1
   hp3Color: {r: 1, g: 1, b: 1, a: 1}
   hp2Color: {r: 1, g: 0.5, b: 0, a: 1}

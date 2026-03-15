@@ -21,7 +21,8 @@ public class GhostVisual : MonoBehaviour
     private bool isFirstGhost = true;
 
     [Header("Attack Marker")]
-    [SerializeField] private SpriteRenderer attackMarkerSpriteRenderer;
+    [Tooltip("공격 위치를 표시할 프리팹")]
+    [SerializeField] private GameObject attackMarkerPrefab;
     [Tooltip("TRACE 모드 클릭 시 공격 마커 색상")]
     [SerializeField] private Color attackMarkerColor = new Color(1f, 0.3f, 0.3f, 0.7f);
 
@@ -112,7 +113,14 @@ public class GhostVisual : MonoBehaviour
             float attackCost = GameManager.Instance.GetAttackConsumption();
             if (GameManager.Instance.GetCurrentGauge() >= attackCost)
             {
-                SpawnAttackMarker(transform.position);
+                // 마우스 방향 계산
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mousePos.z = transform.position.z;
+                Vector3 attackDir = (mousePos - transform.position).normalized;
+
+                // 공격 마커 생성 시 플레이어의 위치에 잔상도 함께 생성
+                SpawnTrailGhost();
+                SpawnAttackMarker(transform.position, attackDir);
             }
         }
     }
@@ -148,18 +156,27 @@ public class GhostVisual : MonoBehaviour
         ghostList.Add(ghost);
     }
 
-    private void SpawnAttackMarker(Vector3 position)
+    private void SpawnAttackMarker(Vector3 position, Vector3 direction)
     {
-        GameObject attackMarker = new GameObject("AttackMarker");
-        attackMarker.transform.position = position;
+        if (attackMarkerPrefab == null) return;
 
-        SpriteRenderer sr = attackMarker.AddComponent<SpriteRenderer>();
+        // 플레이어의 위치에서 바라본 방향으로 1.7f만큼 떨어진 지점을 생성 위치로 설정
+        Vector3 markerPosition = position + direction * 0.7f;
 
-        sr.sprite = attackMarkerSpriteRenderer.sprite;
-        sr.color = attackMarkerColor;
-        attackMarker.transform.localScale = transform.localScale;
+        // 계산된 위치에 프리팹 생성
+        GameObject marker = Instantiate(attackMarkerPrefab, markerPosition, Quaternion.identity);
         
-        attackMarkers.Add(attackMarker);
+        // 공격 방향을 바라보도록 회전 (스프라이트의 위쪽이 앞면이라고 가정)
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        marker.transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+        marker.transform.localScale = Vector3.one * 0.27f;
+
+        if (marker.TryGetComponent<SpriteRenderer>(out var sr))
+        {
+            sr.color = attackMarkerColor;
+        }
+
+        attackMarkers.Add(marker);
     }
 
     private void ClearAttackMarkers()

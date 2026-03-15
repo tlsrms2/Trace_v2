@@ -143,10 +143,10 @@ public abstract class BaseBoss : MonoBehaviour
         AudioManager.Instance.PlayBossDeath();
 
         var particle = Instantiate(damagedParticle, transform.position, Quaternion.identity);
-            ParticleSystem ps = particle.GetComponent<ParticleSystem>();
-            var main = ps.main;
-            main.startColor = Color.red;
-            main.startSize = new ParticleSystem.MinMaxCurve(main.startSize.constantMin * 2, main.startSize.constantMax * 2);
+        ParticleSystem ps = particle.GetComponent<ParticleSystem>();
+        var main = ps.main;
+        main.startColor = Color.red;
+        main.startSize = new ParticleSystem.MinMaxCurve(main.startSize.constantMin * 2, main.startSize.constantMax * 2);
 
         Destroy(gameObject);
     }

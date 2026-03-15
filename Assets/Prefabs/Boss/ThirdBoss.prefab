@@ -450,10 +450,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 766519d299cd30249b066d38a7615676, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThirdBoss
+  patternInterval: 1
   phase1Color: {r: 0.68235296, g: 0.73333335, b: 1, a: 1}
   phase2Color: {r: 0.28702387, g: 0.3744066, b: 0.8113208, a: 1}
   phase3Color: {r: 0, g: 0.15068483, b: 1, a: 1}
-  maxHp: 150
+  maxHp: 100
   speed: 5
   damagedParticle: {fileID: 7710619616481920721, guid: 3c0bd7c7aeb700f47b7af6d70d4c39e7, type: 3}
   introDownDistance: 10
