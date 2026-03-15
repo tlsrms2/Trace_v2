@@ -123,6 +123,8 @@ public abstract class BaseBoss : MonoBehaviour
         Hp = Mathf.Max(Hp, 0f);
         OnHpChanged?.Invoke(Hp, maxHp);
 
+        AudioManager.Instance.PlayBossHit();
+
         if (Hp <= 0f)
         {
             Die();

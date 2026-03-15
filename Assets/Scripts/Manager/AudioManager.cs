@@ -25,7 +25,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip bossAppearSfx;
     [SerializeField] private AudioClip bossDeathSfx;
     [SerializeField] private AudioClip epicMobShootSfx;
+    [SerializeField] private AudioClip epicMobShoot2Sfx;
     [SerializeField] private AudioClip epicMobDashSfx;
+    [SerializeField] private AudioClip playerHitSfx;
+    [SerializeField, Range(0f, 1f)] private float playerHitSfxVolume = 1f;
+    [SerializeField] private AudioClip bossHitSfx;
 
     private Coroutine pitchCoroutine;
 
@@ -107,9 +111,9 @@ public class AudioManager : MonoBehaviour
 
     #region SFX
 
-    public void PlaySfx(AudioClip clip)
+    public void PlaySfx(AudioClip clip, float volumeScale = 1f)
     {
-        sfxSource.PlayOneShot(clip);
+        sfxSource.PlayOneShot(clip, volumeScale);
     }
 
     public void PlayButtonClick() => PlaySfx(buttonClickSfx);
@@ -122,8 +126,11 @@ public class AudioManager : MonoBehaviour
     public void PlayEnemyDeath2() => PlaySfx(enemyDeath2Sfx);
     public void PlayBossDeath() => PlaySfx(bossDeathSfx);
     public void PlayEpicMobShoot() => PlaySfx(epicMobShootSfx);
+    public void PlayEpicMobShoot2() => PlaySfx(epicMobShoot2Sfx);
     public void PlayEpicMobDash() => PlaySfx(epicMobDashSfx);
     public void PlayLaserMobDash() => PlaySfx(laserMobDashSfx);
+    public void PlayBossHit() => PlaySfx(bossHitSfx);
+    public void PlayPlayerHit() => PlaySfx(playerHitSfx, playerHitSfxVolume);
 
     #endregion
 }

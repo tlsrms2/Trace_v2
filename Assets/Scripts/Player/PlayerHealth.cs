@@ -62,8 +62,10 @@ public class PlayerHealth : MonoBehaviour
 
         OnHpChanged?.Invoke(currentHp, maxHp);
 
+        AudioManager.Instance.PlayPlayerHit();
+
         var particle = Instantiate(damagedParticle, transform.position, Quaternion.identity);
-        
+
         if (currentHp <= 0)
         {
             UpdatePlayerColor();

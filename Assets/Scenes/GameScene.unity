@@ -163,7 +163,11 @@ MonoBehaviour:
   bossAppearSfx: {fileID: 8300000, guid: 56ac56810bce08e4b82718079ea22f88, type: 3}
   bossDeathSfx: {fileID: 8300000, guid: afe8b0d4ad2407f46b4f9557bd600230, type: 3}
   epicMobShootSfx: {fileID: 8300000, guid: f78e25052928232488533154c21a9b4f, type: 3}
+  epicMobShoot2Sfx: {fileID: 8300000, guid: bf57383b60593ee4f8af502e78a6caab, type: 3}
   epicMobDashSfx: {fileID: 8300000, guid: baf3cbda9e7d19742b16268ab2d5a35c, type: 3}
+  playerHitSfx: {fileID: 8300000, guid: 4fcec961d9c80d34980c3cf6c3fe2897, type: 3}
+  playerHitSfxVolume: 1
+  bossHitSfx: {fileID: 8300000, guid: b0f5719625bb43146b547f25e137138b, type: 3}
 --- !u!4 &9152237
 Transform:
   m_ObjectHideFlags: 0
@@ -389,6 +393,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 9152236}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlaySfx
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: c6290c482479b914f8119dc907a2d525, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2828,6 +2844,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 9152236}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlaySfx
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: c6290c482479b914f8119dc907a2d525, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1602944865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3232,7 +3260,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df133c93f12205f46a6d21d9bae15fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveManager
-  currentStageLevel: 1
+  useDebugStage: 0
+  debugStageIndex: 0
+  currentStageLevel: 0
   bossPrefabs:
   - {fileID: 6892968917303159334, guid: 03fd80b75aef24c449282b960b0651dd, type: 3}
   - {fileID: 6892968917303159334, guid: 9506c846c483d4e43a78780aa07a7ff7, type: 3}
@@ -3241,7 +3271,6 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 4.5, z: 0}
   - {x: 0, y: 2.8, z: 0}
-  bossSpawnPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &2084464468
 Transform:
   m_ObjectHideFlags: 0

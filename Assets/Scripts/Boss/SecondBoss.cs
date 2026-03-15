@@ -70,6 +70,8 @@ public class SecondBoss : BaseBoss
     {
         float currentAngle = 0f;
 
+        AudioManager.Instance.PlayLaserWarning();
+
         for (int i = 0; i < p1BulletCount; i++)
         {
             yield return StartCoroutine(PausedWait(p1FireRate));
@@ -97,6 +99,8 @@ public class SecondBoss : BaseBoss
         float timer = 0f;
         float rainTimer = 0f;
         float shootTimer = 0f;
+
+        AudioManager.Instance.PlayLaserMobDash();
 
         while (timer < patternDuration)
         {
@@ -133,6 +137,7 @@ public class SecondBoss : BaseBoss
                 {
                     Vector2 dirToPlayer = (target.position - transform.position).normalized;
                     FireBullet(bulletPrefab, transform.position, dirToPlayer, p2AimBulletSpeed, p2BulletDamage);
+                    AudioManager.Instance.PlayEpicMobShoot2();
                 }
             }
 
@@ -155,6 +160,8 @@ public class SecondBoss : BaseBoss
         GameObject[] chargeBullet = new GameObject[p3Muzzles.Length];
         Vector3 targetScale = Vector3.one;
 
+        AudioManager.Instance.PlayBossAppear();
+        
         for (int i = 0; i < p3Muzzles.Length; i++)
         {
             chargeBullet[i] = Instantiate(bigBulletPrefab, p3Muzzles[i]);

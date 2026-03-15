@@ -20,12 +20,17 @@ public class WaveManager : MonoBehaviour
     // --- 보스 UI 이벤트 ---
     public event Action<float, float> OnBossHpUpdated;  // (현재HP, 최대HP)
 
+    [Header("디버깅 설정")]
+    [Tooltip("에디터에서 GameScene을 직접 실행할 때 원하는 스테이지를 테스트하려면 체크하세요.")]
+    [SerializeField] private bool useDebugStage = false;
+    [Tooltip("테스트할 스테이지 인덱스 (0: 1스테이지, 1: 2스테이지, 2: 3스테이지)")]
+    [SerializeField] private int debugStageIndex = 0;
+
     [Header("보스 설정")]
     [Tooltip("현재 스테이지 번호 (1, 2, 3...)")]
     [SerializeField] private int currentStageLevel = 1; // 이 필드는 이제 GameManager.SelectedStageIndex에 의해 설정됩니다.
     [SerializeField] private GameObject[] bossPrefabs; // 여러 보스 프리팹
     [SerializeField] private Vector3[] bossSpawnPositions; // 각 보스의 소환 위치
-    [SerializeField] private Vector3 bossSpawnPosition = Vector3.zero;
 
     private bool bossAlive = false;
 
@@ -45,6 +50,12 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator SpawnBoss()
     {
+        // 에디터 등에서 디버그 모드를 켰을 경우 강제로 인덱스를 덮어씁니다.
+        if (useDebugStage)
+        {
+            GameManager.SelectedStageIndex = debugStageIndex;
+        }
+
         // GameManager에서 선택한 인덱스를 기반으로 스테이지 레벨 설정
         currentStageLevel = GameManager.SelectedStageIndex + 1;
 
@@ -54,7 +65,7 @@ public class WaveManager : MonoBehaviour
         if (bossIndex < 0 || bossIndex >= bossPrefabs.Length) bossIndex = 0;
 
         // 해당 보스의 전용 소환 위치 가져오기
-        Vector3 spawnPos = bossSpawnPosition;
+        Vector3 spawnPos = Vector3.one;
         if (bossIndex < bossSpawnPositions.Length)
         {
             spawnPos = bossSpawnPositions[bossIndex];

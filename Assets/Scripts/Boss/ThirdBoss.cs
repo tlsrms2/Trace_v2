@@ -122,16 +122,14 @@ public class ThirdBoss : BaseBoss
             currentPos = nextPos;
             
             ghostsPos.Add(nextPos);
-            
-            AudioManager.Instance.PlayEpicMobDash();
-            
+    
             yield return StartCoroutine(PausedWait(recordInterval));
         }
 
         yield return StartCoroutine(PausedWait(0.5f));
 
         // 2. Replay: 생성된 잔상들을 순서대로 매우 빠르게 통과하며 파괴 (Replay 연출)
-        AudioManager.Instance.PlayLaserWarning(); 
+        AudioManager.Instance.PlayEpicMobShoot(); // C
 
         for (int i = 0; i < ghostsPos.Count; i++)
         {
@@ -146,7 +144,7 @@ public class ThirdBoss : BaseBoss
             {
                 Destroy(ghosts[i]);
             }
-            
+
             ShootTarget();
             
             // Phase 3일 때 Replay 중간 지점에서 폭탄 흩뿌리기
@@ -183,7 +181,7 @@ public class ThirdBoss : BaseBoss
 
             Vector3 attackDir = (target.position - transform.position).normalized;
             if (attackDir == Vector3.zero) attackDir = Vector3.down;
-            
+
             yield return StartCoroutine(BossSwingAttack(attackDir));
         }
     }
@@ -194,6 +192,8 @@ public class ThirdBoss : BaseBoss
     private IEnumerator BossSwingAttack(Vector3 direction)
     {
         if (meleeAttackTransform == null) yield break;
+
+        AudioManager.Instance.PlayEpicMobShoot2(); // C
 
         meleeAttackTransform.gameObject.SetActive(true);
         
@@ -230,8 +230,6 @@ public class ThirdBoss : BaseBoss
     private IEnumerator ShadowDance()
     {
         if (target == null) yield break;
-
-        AudioManager.Instance.PlayLaserWarning();
         
         // 보스 은신 (무적 및 모습 감추기)
         spriteRenderer.enabled = false;
@@ -240,6 +238,9 @@ public class ThirdBoss : BaseBoss
         int shadowCount = 6;
         List<GameObject> shadows = new List<GameObject>();
         Vector3 playerPos = target.position;
+
+        AudioManager.Instance.PlayLaserMobDash(); // C
+
 
         // 플레이어 주변을 포위하듯 원형으로 분신 생성
         for (int i = 0; i < shadowCount; i++)
@@ -260,7 +261,6 @@ public class ThirdBoss : BaseBoss
         yield return StartCoroutine(PausedWait(0.5f));
 
         // 분신들이 일제히 플레이어 위치로 쇄도
-        AudioManager.Instance.PlayEpicMobDash();
         float dashTime = 0.2f;
         float elapsed = 0f;
         
@@ -312,7 +312,7 @@ public class ThirdBoss : BaseBoss
     {
         if (target == null) yield break;
 
-        AudioManager.Instance.PlayLaserWarning();
+        AudioManager.Instance.PlayLaserPlace(); // C
 
         // 1. Fade Out (점점 투명해짐)
         float elapsed = 0f;
@@ -466,7 +466,6 @@ public class ThirdBoss : BaseBoss
 
     private IEnumerator DashTo(Vector3 targetPos, float speed)
     {
-        AudioManager.Instance.PlayEpicMobDash();
         float distance = Vector3.Distance(transform.position, targetPos);
         float duration = Mathf.Clamp(distance / speed, 0.05f, 1f); 
         float elapsed = 0f;
@@ -510,7 +509,6 @@ public class ThirdBoss : BaseBoss
     private void ShootSpread(Vector3 direction)
     {
         if (swordBulletPrefab == null) return;
-        AudioManager.Instance.PlayEpicMobShoot();
         
         float[] angles = { -20f, 0f, 20f };
 
@@ -524,7 +522,8 @@ public class ThirdBoss : BaseBoss
     private void ShootCircle(int cor)
     {
         if (bulletPrefab == null) return;
-        AudioManager.Instance.PlayEpicMobShoot();
+
+        AudioManager.Instance.PlayEnemyDeath2(); // C
         
         int bulletCount = 12;
         for (int i = 0; i < bulletCount; i++)
@@ -560,8 +559,8 @@ public class ThirdBoss : BaseBoss
     private void ScatterBombs()
     {
         if (bombPrefab == null) return;
-        
-        AudioManager.Instance.PlayEpicMobShoot(); // 또는 폭탄 투하 사운드로 교체 가능
+
+        AudioManager.Instance.PlayLaserWarning(); // C
         
         Camera mainCam = Camera.main;
         float camH = mainCam.orthographicSize;

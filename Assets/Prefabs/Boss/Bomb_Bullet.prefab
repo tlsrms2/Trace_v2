@@ -185,6 +185,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BombBullet
   explosionDelay: 2
   damage: 1
-  explosionRadius: 10
+  explosionRadius: 1
   warningColor: {r: 1, g: 0.28773582, b: 0.28773582, a: 0.5}
   circleSprite: {fileID: -2413806693520163455, guid: c4a87ab0309c9b14aa853c334b6c9632, type: 3}
