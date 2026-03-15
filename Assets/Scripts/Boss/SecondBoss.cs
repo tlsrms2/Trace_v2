@@ -59,7 +59,7 @@ public class SecondBoss : BaseBoss
                     break;
             }
 
-            yield return StartCoroutine(PausedWait(0.5f));
+            yield return StartCoroutine(PausedWait(patternInterval));
         }
     }
 

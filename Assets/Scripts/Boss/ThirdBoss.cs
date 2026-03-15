@@ -92,7 +92,7 @@ public class ThirdBoss : BaseBoss
                     break;
             }
 
-            yield return StartCoroutine(PausedWait(1f));
+            yield return StartCoroutine(PausedWait(patternInterval));
         }
     }
 

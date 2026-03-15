@@ -1249,7 +1249,7 @@ MonoBehaviour:
   CurrentGauge: 100
   MoveConsumptionRate: 10
   AttackConsumption: 5
-  RecoveryRate: 20
+  RecoveryRate: 30
   RecoveryStartTime: 0
 --- !u!4 &835026620
 Transform:
@@ -3243,8 +3243,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df133c93f12205f46a6d21d9bae15fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveManager
-  bossPrefab: {fileID: 6892968917303159334, guid: 3c81f74689bcc584689c050bc23015fc, type: 3}
-  bossSpawnPosition: {x: 0, y: 4.5, z: 0}
+  bossPrefab: {fileID: 6892968917303159334, guid: 03fd80b75aef24c449282b960b0651dd, type: 3}
+  bossSpawnPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &2084464468
 Transform:
   m_ObjectHideFlags: 0

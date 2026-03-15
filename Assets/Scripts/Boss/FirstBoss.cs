@@ -30,6 +30,9 @@ public class FirstBoss : BaseBoss
     private Vector3 directionV3;
     private float initialWidth;
     private LineRenderer lineRenderer;
+    
+    private bool isColorOverridden = false;
+    private Color overrideColor;
 
     protected override void Awake()
     {
@@ -39,6 +42,17 @@ public class FirstBoss : BaseBoss
         mainCam = Camera.main;
     }
     
+    protected override void Update()
+    {
+        base.Update();
+        
+        // BaseBoss의 ChangeColor()가 매 프레임 색상을 덮어쓰는 것을 방지
+        if (isColorOverridden)
+        {
+            spriteRenderer.color = overrideColor;
+        }
+    }
+
     private float PhaseBulletSpeed() => CurrentPhase switch
     {
         BossPhase.Phase2 => bulletSpeed * 1.4f,
@@ -51,36 +65,59 @@ public class FirstBoss : BaseBoss
     // ───────────────────────────────
     protected override IEnumerator PatternLoop()
     {
-        while (true)
+        while (!IsDead)
         {
-            Dash();
-            yield return StartCoroutine(PausedWait(1f));
-            Dash();
-            yield return StartCoroutine(PausedWait(1f));
-            StartCoroutine(BackToOriginalPosition(transform.position));
-            yield return StartCoroutine(PausedWait(2f));
-
-            int shootCount = (CurrentPhase == BossPhase.Phase3) ? 4 : 3;
-            for (int i = 0; i < shootCount; i++)
+            switch (CurrentPhase)
             {
-                Shoot();
-                yield return StartCoroutine(PausedWait(0.5f));
+                case BossPhase.Phase1:
+                    yield return StartCoroutine(Dash());
+                    StartCoroutine(BackToOriginalPosition(transform.position));
+                    yield return StartCoroutine(PausedWait(2f));
+
+                    break;
+                case BossPhase.Phase2:
+                    yield return StartCoroutine(Dash());
+                    yield return StartCoroutine(PausedWait(1f));
+                    yield return StartCoroutine(Dash());
+                    yield return StartCoroutine(PausedWait(1f));
+                    StartCoroutine(BackToOriginalPosition(transform.position));
+                    yield return StartCoroutine(PausedWait(2f));
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Shoot();
+                        yield return StartCoroutine(PausedWait(0.5f));
+                    }
+                    break;
+                case BossPhase.Phase3:
+                    yield return StartCoroutine(SpecialAttack());
+                    yield return StartCoroutine(PausedWait(2f));
+                    yield return StartCoroutine(Dash());
+                    yield return StartCoroutine(PausedWait(1f));
+                    yield return StartCoroutine(Dash());
+                    yield return StartCoroutine(PausedWait(1f));
+                    StartCoroutine(BackToOriginalPosition(transform.position));
+                    yield return StartCoroutine(PausedWait(2f));
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Shoot();
+                        yield return StartCoroutine(PausedWait(0.5f));
+                    }
+                    break;
             }
 
-            yield return StartCoroutine(PausedWait(1.5f));
-            yield return StartCoroutine(SpecialAttack());
-            yield return StartCoroutine(PausedWait(2f));
+            yield return StartCoroutine(PausedWait(patternInterval));
         }
     }
 
     // ───────────────────────────────
     // 패턴 1: 대쉬 공격
     // ───────────────────────────────
-    private void Dash()
+    private IEnumerator Dash()
     {
         AudioManager.Instance.PlayEpicMobDash();
         Vector2 dir = (target.position - transform.position).normalized;
-        StartCoroutine(DashAttackRoutine(dir));
+        yield return StartCoroutine(DashAttackRoutine(dir));
     }
 
     private IEnumerator DashAttackRoutine(Vector2 dir)
@@ -89,13 +126,11 @@ public class FirstBoss : BaseBoss
         while (GameManager.Instance.CurrentPhase == GamePhase.Paused)
             yield return null;
 
-        // 원래 색상 저장
-        Color originalColor = spriteRenderer.color;
-
-        spriteRenderer.color = Color.red;
+        isColorOverridden = true;
+        overrideColor = Color.red;
         yield return StartCoroutine(PausedWait(0.25f));
 
-        spriteRenderer.color = Color.green;
+        overrideColor = Color.green;
         float dashDuration = 0.25f;
         float elapsed = 0f;
 
@@ -109,8 +144,7 @@ public class FirstBoss : BaseBoss
             yield return null;
         }
 
-        // 원래 색상으로 복원
-        spriteRenderer.color = originalColor;
+        isColorOverridden = false;
     }
 
     private IEnumerator BackToOriginalPosition(Vector2 startPos)

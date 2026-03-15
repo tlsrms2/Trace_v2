@@ -394,10 +394,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f41cbc57aba5bba40812b54f71138a64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
+  patternInterval: 1
   phase1Color: {r: 0.5613208, g: 1, b: 0.5613208, a: 1}
   phase2Color: {r: 0.2981043, g: 0.8207547, b: 0.2981043, a: 1}
   phase3Color: {r: 0, g: 1, b: 0, a: 1}
-  maxHp: 300
+  maxHp: 200
   speed: 25
   damagedParticle: {fileID: 7710619616481920721, guid: 3c0bd7c7aeb700f47b7af6d70d4c39e7, type: 3}
   introDownDistance: 9

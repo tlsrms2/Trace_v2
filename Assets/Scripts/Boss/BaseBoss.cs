@@ -12,7 +12,8 @@ public enum BossPhase { Phase1, Phase2, Phase3 }
 
 public abstract class BaseBoss : MonoBehaviour
 {
-    [Header("페이즈별 색")]
+    [SerializeField] protected float patternInterval;
+    [Header("페이즈 설정")]
     [SerializeField] protected Color phase1Color;
     [SerializeField] protected Color phase2Color;
     [SerializeField] protected Color phase3Color;
