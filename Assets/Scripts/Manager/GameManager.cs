@@ -83,7 +83,6 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F12))
         {
             PlayerPrefs.DeleteAll();
-            Debug.Log("모든 진행도 데이터(PlayerPrefs)가 초기화되었습니다! 게임을 재시작하면 자물쇠가 잠깁니다.");
         }
 
         HandleGauge();
