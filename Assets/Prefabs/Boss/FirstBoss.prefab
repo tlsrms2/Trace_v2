@@ -401,6 +401,7 @@ MonoBehaviour:
   maxHp: 200
   speed: 25
   damagedParticle: {fileID: 7710619616481920721, guid: 3c0bd7c7aeb700f47b7af6d70d4c39e7, type: 3}
+  IntroParticle: {fileID: 7710619616481920721, guid: e73da7d949fc3764698fc9fc34e9f6d8, type: 3}
   introDownDistance: 9
   introDuration: 2
   phase2Threshold: 0.7

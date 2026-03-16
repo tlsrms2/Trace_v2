@@ -22,6 +22,7 @@ public abstract class BaseBoss : MonoBehaviour
     [SerializeField] protected float maxHp = 100f;
     [SerializeField] protected float speed = 3f;
     [SerializeField] private GameObject damagedParticle;
+    [SerializeField] private GameObject IntroParticle;
 
     [Header("인트로 설정")]
     [SerializeField] protected float introDownDistance = 10f;
@@ -205,6 +206,8 @@ public abstract class BaseBoss : MonoBehaviour
     {
         float timer = 0f;
         float shakeMagnitude = 0.05f;
+
+        var particle = Instantiate(IntroParticle, transform.position, Quaternion.identity);
 
         while (timer < duration)
         {

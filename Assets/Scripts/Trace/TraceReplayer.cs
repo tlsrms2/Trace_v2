@@ -66,6 +66,11 @@ public class TraceReplayer : MonoBehaviour
         // 잔상 리스트 가져오기
         List<GameObject> ghostList = gv.GetGhostListCopy();
 
+        // [FIX] 리플레이 시작 시, 시작 지점(frames[0])에 있는 잔상을 즉시 제거
+        transform.position = frames[0].position;
+        transform.rotation = frames[0].rotation;
+        RemoveOverlappingGhosts(ghostList);
+
         for (int i = 0; i < frameCount - 1; i++)
         {
             TraceFrame from = frames[i];
