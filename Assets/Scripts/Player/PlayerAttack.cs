@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class PlayerAttack : MonoBehaviour
     [Tooltip("공격 시 휘두르는 총 각도 (도 단위)")]
     [SerializeField] private float swingAngle = 90f;
 
+    private HashSet<BaseBoss> hitBosses = new HashSet<BaseBoss>();
+
     private void Awake()
     {
         gameObject.SetActive(false);
@@ -17,6 +20,7 @@ public class PlayerAttack : MonoBehaviour
 
     public void Attack(Vector3 direction)
     {
+        hitBosses.Clear(); // 공격을 시작할 때마다 타격 기록 초기화
         gameObject.SetActive(true);
 
         StopAllCoroutines();
@@ -60,9 +64,20 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        TryDamageBoss(collision);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        TryDamageBoss(collision);
+    }
+
+    private void TryDamageBoss(Collider2D collision)
+    {
         BaseBoss boss = collision.GetComponent<BaseBoss>();
-        if (boss != null)
+        if (boss != null && !hitBosses.Contains(boss))
         {
+            hitBosses.Add(boss);
             boss.TakeDamage(damage);
         }
     }
