@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4156929031639804453}
   - component: {fileID: 7529394493185834358}
   - component: {fileID: 1626396548220528894}
+  - component: {fileID: -6548137788562417047}
   m_Layer: 0
   m_Name: Boss Intro Particle
   m_TagString: Untagged
@@ -4836,3 +4837,15 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!114 &-6548137788562417047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7710619616481920721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4724a7de21403734da0523ef407033eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PausableParticle
